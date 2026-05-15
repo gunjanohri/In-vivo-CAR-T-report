@@ -26,11 +26,14 @@ const headingIdAliases = new Map([
   ["1. Why the field matters now", "executive-summary"],
   ["2. How CAR-T therapy works: general mechanism", "2-how-car-t-therapy-works-general-mechanism"],
   ["2. How CAR-T works", "2-how-car-t-therapy-works-general-mechanism"],
+  ["How CAR-T works", "2-how-car-t-therapy-works-general-mechanism"],
   ["Allogeneic / off-the-shelf CAR-T", "allogeneic-off-the-shelf-car-t"],
   ["4. In Vivo CAR-T therapy", "4-in-vivo-car-t-therapy"],
   ["4. In Vivo CAR-T as a delivery model", "4-in-vivo-car-t-therapy"],
+  ["In vivo CAR-T as a delivery model", "4-in-vivo-car-t-therapy"],
   ["7. Delivery methods for in vivo CAR-T", "7-delivery-methods-for-in-vivo-car-t"],
   ["7. Delivery methods and strategic implications for in vivo CAR-T", "7-delivery-methods-for-in-vivo-car-t"],
+  ["Delivery methods and strategic implications", "7-delivery-methods-for-in-vivo-car-t"],
 ]);
 
 function createHeadingId(text, counts) {
@@ -497,7 +500,8 @@ function decorateInsightLists() {
     "strategic-read-through",
     "what-the-deal-activity-suggests",
     "what-early-financings-suggest",
-    "11-conclusion",
+    "key-diligence-questions",
+    "what-to-watch-next",
   ].forEach((id) => {
     const heading = document.getElementById(id);
     if (!heading) {
@@ -533,6 +537,9 @@ function classifyTablesBySection() {
     if (label.includes("modality comparison")) {
       table.classList.add("comparison-table");
     }
+    if (label.includes("where to play")) {
+      table.classList.add("comparison-table");
+    }
     if (label.includes("competitive landscape")) {
       table.classList.add("landscape-table");
     }
@@ -548,6 +555,22 @@ function classifyTablesBySection() {
     if (label.includes("constraints")) {
       table.classList.add("constraint-table");
     }
+  });
+}
+
+function decorateEmphasisCallouts() {
+  ["final-takeaway"].forEach((id) => {
+    const heading = document.getElementById(id);
+    if (!heading) {
+      return;
+    }
+
+    const block = heading.nextElementSibling;
+    if (!block || block.tagName !== "P") {
+      return;
+    }
+
+    block.classList.add("report-callout", "report-callout-emphasis");
   });
 }
 
@@ -615,9 +638,9 @@ function buildGeneralMoaFigure() {
   return buildScientificFigureImage({
     kicker: "Mechanism of action",
     title: "General CAR-T mechanism",
-    subtitle: "Recognition, activation, and target-cell killing.",
+    subtitle: "Recognition, activation and target-cell killing.",
     ariaLabel:
-      "General CAR-T mechanism showing a native T cell, CAR engineering, antigen recognition, T-cell activation, tumor-cell killing, and immune signaling",
+      "General CAR-T mechanism showing a native T cell, CAR engineering, antigen recognition, T-cell activation, tumor-cell killing and immune signaling",
     src: "./research/in-vivo-car-t/assets/how_car_t_cells_work.svg",
     alt: "Figure 1: CAR-T mechanism of action",
   });
@@ -654,7 +677,7 @@ function buildDeliveryExhibit() {
         <div class="panel-head">
           <p class="panel-kicker">Delivery methods</p>
           <h2 data-no-toc>Major delivery architectures</h2>
-          <p>Carrier choice drives targeting logic, expression profile, and redosing options.</p>
+          <p>Carrier choice drives targeting logic, expression profile and redosing options.</p>
         </div>
 
         <div class="delivery-matrix" role="img" aria-label="Comparison matrix of major in vivo CAR-T delivery architectures">
@@ -742,6 +765,7 @@ async function loadReport() {
     decorateCallouts();
     decorateSummarySection();
     decorateInsightLists();
+    decorateEmphasisCallouts();
     classifyTablesBySection();
     buildToc();
   } catch (error) {
